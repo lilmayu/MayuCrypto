@@ -30,7 +30,6 @@ public class Ticker {
 
     public JSONObject get() throws IOException {
         String json = Request.get(Kucoin.apiUrl+"/api/v1/market/orderbook/level1?symbol="+symbol);
-        System.out.println(json);
         return new JSONObject(json);
     }
 }

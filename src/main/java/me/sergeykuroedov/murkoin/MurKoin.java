@@ -2,6 +2,7 @@ package me.sergeykuroedov.murkoin;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import me.sergeykuroedov.murkoin.commands.Price;
+import me.sergeykuroedov.murkoin.commands.Stats;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -18,7 +19,8 @@ public class MurKoin {
                 .setOwnerId("296338968763432960")
                 .setActivity(Activity.listening("Murka"))
                 .setPrefix(config.getPrefix())
-                .addCommand(new Price());
+                .addCommand(new Price())
+                .addCommand(new Stats());
 
         JDA api = JDABuilder.createDefault(config.getDiscordToken())
                 .addEventListeners(client.build())
