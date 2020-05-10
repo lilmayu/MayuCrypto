@@ -25,18 +25,7 @@ import java.io.IOException;
 public class Ticker {
     String symbol;
     Ticker(String symbol) {
-        symbol = symbol.toUpperCase();
-        String[] arr = symbol.split("-");
-        if(arr.length == 1) {
-            arr = symbol.split(" ");
-            if(arr.length == 2) {
-                this.symbol = arr[0]+"-"+arr[1];
-            } else {
-                this.symbol = arr[0]+"-USDT";
-            }
-        } else if(arr.length == 2) {
-            this.symbol = symbol;
-        }
+        this.symbol = symbol;
     }
 
     public JSONObject get() throws IOException {
