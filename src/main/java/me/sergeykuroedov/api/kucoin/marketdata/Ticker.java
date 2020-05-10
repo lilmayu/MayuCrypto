@@ -1,11 +1,10 @@
 package me.sergeykuroedov.api.kucoin.marketdata;
 
-import com.google.gson.Gson;
 import me.sergeykuroedov.utils.Request;
 import me.sergeykuroedov.api.kucoin.Kucoin;
+import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Currency;
 
 /*
     GET /api/v1/market/orderbook/level1
@@ -31,16 +30,12 @@ public class Ticker {
         if(arr[1] == null) {
             this.symbol = arr[0]+"-USDT";
         }
+        this.symbol = symbol;
     }
 
-    public TickerEntity get() throws IOException {
+    public JSONObject get() throws IOException {
         String json = Request.get(Kucoin.apiUrl+"/api/v1/market/orderbook/level1?symbol="+symbol);
-        return new Gson().fromJson(json, TickerEntity.class);
-    }
-
-    public static class TickerEntity {
-        int sequence;
-        Currency bestAsk, size, price, bestBidSize, bestBid, bestAskSize;
-        int time;
+        System.out.println(json);
+        return new JSONObject(json);
     }
 }
