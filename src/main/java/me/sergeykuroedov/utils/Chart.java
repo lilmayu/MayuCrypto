@@ -58,7 +58,7 @@ public class Chart {
 
         double open, close, low, high, height, x, y;
         String color;
-        for (int i = 0; i < arr.length(); i++) {
+        for (int i = arr.length()-1; i >= 0; i--) {
             JSONArray item = arr.getJSONArray(i);
 
             high = (max - item.getDouble(3)) * k;

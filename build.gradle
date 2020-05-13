@@ -9,7 +9,7 @@ application {
 }
 group 'me.sergeykuroedov.murkoin'
 sourceCompatibility = 1.8
-version '0.0.1'
+version '0.0.2'
 repositories {
     mavenCentral()
     jcenter()
