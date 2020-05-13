@@ -32,9 +32,9 @@ public class Stats extends Command {
                 EmbedBuilder eb = new EmbedBuilder()
                         .setTitle("Stats "+symbol)
                         .addField("Price", data.getString("last"), false)
-                        .addField("24h high", data.getString("high"), false)
-                        .addField("24h low", data.getString("low"), false)
-                        .addField("Change", data.getString("changePrice") + " (" +percentage + " %)", false);
+                        .addField("24h high", data.getString("high"), true)
+                        .addField("24h low", data.getString("low"), true)
+                        .addField("Change", data.getString("changePrice") + " (" + Math.round(percentage  *100.0) / 100.0 + " %)", true);
                 long epoch = System.currentTimeMillis()/1000;
                 long start = epoch - 60*60*24;
                 JSONObject klines = Kucoin.marketData.getKlines(symbol, start, epoch, "1hour");
