@@ -1,6 +1,11 @@
 package me.lilmayu.mayuCrypto.main.utils;
 
+/**
+ * Code from MurKoin
+ */
+
 public class Symbol {
+
     private String first;
     private String second;
 
@@ -22,20 +27,20 @@ public class Symbol {
         }
     }
 
-    public void setFirst(String str) {
-        first = str;
-    }
-
     public String getFirst() {
         return first;
     }
 
-    public void setSecond(String str) {
-        second = str;
+    public void setFirst(String str) {
+        first = str;
     }
 
     public String getSecond() {
         return second;
+    }
+
+    public void setSecond(String str) {
+        second = str;
     }
 
     @Override

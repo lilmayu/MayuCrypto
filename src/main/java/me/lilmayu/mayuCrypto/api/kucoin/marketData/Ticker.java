@@ -22,14 +22,20 @@ import java.io.IOException;
     "time": 1550653727731
  */
 
+/**
+ * Code from MurKoin
+ */
+
 public class Ticker {
+
     String symbol;
+
     Ticker(String symbol) {
         this.symbol = symbol;
     }
 
     public JSONObject get() throws IOException {
-        String json = Request.get(Kucoin.apiUrl+"/api/v1/market/orderbook/level1?symbol="+symbol);
+        String json = Request.get(Kucoin.apiUrl + "/api/v1/market/orderbook/level1?symbol=" + symbol);
         return new JSONObject(json);
     }
 }

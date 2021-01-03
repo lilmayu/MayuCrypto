@@ -26,14 +26,20 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * Code from MurKoin
+ */
+
 public class Stats {
+
     String symbol;
+
     Stats(String symbol) {
         this.symbol = symbol;
     }
 
     public JSONObject get() throws IOException {
-        String json = Request.get(Kucoin.apiUrl+"/api/v1/market/stats?symbol="+symbol);
+        String json = Request.get(Kucoin.apiUrl + "/api/v1/market/stats?symbol=" + symbol);
         return new JSONObject(json);
     }
 }

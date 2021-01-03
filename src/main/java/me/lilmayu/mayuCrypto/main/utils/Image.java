@@ -9,11 +9,18 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 
+/**
+ * Code from MurKoin, edited by lilmayu
+ */
+
 public class Image {
+
     private File file;
 
     public Image(File file) {
@@ -31,23 +38,23 @@ public class Image {
     public Image convert(String output) throws InterruptedException, IOException, IM4JavaException {
         ConvertCmd convert = new ConvertCmd();
         IMOperation op = new IMOperation();
-        String path = this.file.getAbsoluteFile().getParent()+File.separator;
+        String path = this.file.getAbsoluteFile().getParent() + File.separator;
         op.addImage(this.file.getAbsolutePath());
-        op.addImage(path+output);
+        op.addImage(path + output);
         convert.run(op);
-        return new Image(path+output);
+        return new Image(path + output);
     }
 
     public Image convertTransparent(String output) throws InterruptedException, IOException, IM4JavaException {
         ConvertCmd convert = new ConvertCmd();
         IMOperation op = new IMOperation();
-        String path = this.file.getAbsoluteFile().getParent()+File.separator;
+        String path = this.file.getAbsoluteFile().getParent() + File.separator;
         //op.background("none");
         op.addImage(this.file.getAbsolutePath());
-        op.addImage(path+output);
+        op.addImage(path + output);
         Logger.debug("op: '" + op.toString() + "'");
         convert.run(op);
-        return new Image(path+output);
+        return new Image(path + output);
     }
 
     public Image convertToPng(String output) throws IOException, TranscoderException {
@@ -63,7 +70,7 @@ public class Image {
         // Step 5- close / flush Output Stream
         png_ostream.flush();
         png_ostream.close();
-        String path = this.file.getAbsoluteFile().getParent()+File.separator;
-        return new Image(path+output);
+        String path = this.file.getAbsoluteFile().getParent() + File.separator;
+        return new Image(path + output);
     }
 }

@@ -35,7 +35,12 @@ import java.io.IOException;
     ]
  */
 
+/**
+ * Code from MurKoin
+ */
+
 public class Klines {
+
     private Symbol symbol;
     private long start;
     private long end;

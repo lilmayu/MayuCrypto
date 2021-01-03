@@ -35,5 +35,4 @@ public class BotConfig {
     public String getPrefix() {
         return prefix;
     }
-
 }

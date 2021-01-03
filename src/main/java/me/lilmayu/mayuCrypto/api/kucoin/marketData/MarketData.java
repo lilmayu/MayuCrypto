@@ -5,7 +5,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+/**
+ * Code from MurKoin
+ */
+
 public class MarketData {
+
     public JSONObject getTicker(String symbol) throws IOException {
         return new Ticker(symbol).get();
     }

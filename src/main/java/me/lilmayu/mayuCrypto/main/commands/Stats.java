@@ -16,40 +16,45 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileWriter;
 
+/**
+ * Code from MurKoin, edited by lilmayu
+ */
+
 public class Stats extends Command {
 
     public Stats() {
         this.name = "Stats";
-        this.aliases = new String[] {"stats"};
+        this.aliases = new String[]{"stats"};
     }
 
     @Override
     protected void execute(CommandEvent event) {
-        Symbol symbol = new Symbol(event.getArgs());
         MessageChannel messageChannel = event.getChannel();
+        EmbedBuilder embedBuilderGenerating = new EmbedBuilder();
+        embedBuilderGenerating.setTitle("Generating stats graph...");
+        Message message = messageChannel.sendMessage(embedBuilderGenerating.build()).complete();
 
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle("Generating stats graph...");
-        Message message = messageChannel.sendMessage(embedBuilder.build()).complete();
+        Symbol symbol = new Symbol(event.getArgs());
         Image finalImage = null;
         Exception exception = null;
-        EmbedBuilder eb = null;
+        EmbedBuilder embedBuilderWithGraph = null;
+
         try {
             JSONObject stats = Kucoin.marketData.getStats(symbol.toString());
             String code = stats.getString("code");
-            if(code.equals("200000")) {
+            if (code.equals("200000")) {
                 JSONObject data = stats.getJSONObject("data");
                 double percentage = data.getDouble("changeRate") * 100;
-                eb = new EmbedBuilder()
-                        .setTitle("Stats "+symbol)
+                embedBuilderWithGraph = new EmbedBuilder()
+                        .setTitle("Stats " + symbol)
                         .addField("Price", data.getString("last"), false)
                         .addField("24h high", data.getString("high"), true)
                         .addField("24h low", data.getString("low"), true)
-                        .addField("Change", data.getString("changePrice") + " (" + Math.round(percentage  *100.0) / 100.0 + " %)", true);
-                long epoch = System.currentTimeMillis()/1000;
-                long start = epoch - 60*60*24;
+                        .addField("Change", data.getString("changePrice") + " (" + Math.round(percentage * 100.0) / 100.0 + " %)", true);
+                long epoch = System.currentTimeMillis() / 1000;
+                long start = epoch - 60 * 60 * 24;
                 JSONObject klines = Kucoin.marketData.getKlines(symbol, start, epoch, "1hour");
-                if(klines.getString("code").equals("200000")) {
+                if (klines.getString("code").equals("200000")) {
                     JSONArray arr = klines.getJSONArray("data");
                     Chart ch = new Chart(arr, 600, 180);
                     File f = new File("temp.svg");
@@ -57,16 +62,16 @@ public class Stats extends Command {
                     fw.write(ch.generate());
                     fw.close();
                     finalImage = new Image(f).convertToPng("graph.png");
-                    eb.setImage("attachment://graph.png");
+                    embedBuilderWithGraph.setImage("attachment://graph.png");
                     message.delete().complete();
-                    //event.getChannel().sendFile(finalImage.getFile(), "graph.png").embed(eb.build()).queue();
                 } else {
-                    //event.reply(eb.build());
+                    message.delete().complete();
+                    event.reply(embedBuilderWithGraph.build());
                 }
             } else {
-                //event.reply(stats.getString("msg"));
+                message.delete().complete();
+                event.reply(stats.getString("msg"));
             }
-            //message.delete().complete();
         } catch (Exception e) {
             e.printStackTrace();
             exception = e;
@@ -98,7 +103,7 @@ public class Stats extends Command {
             message.editMessage(errorMessageEmbed.build()).queue();
             Logger.debug("here 3");
         } else {
-            event.getChannel().sendFile(finalImage.getFile(), "graph.png").embed(eb.build()).queue();
+            event.getChannel().sendFile(finalImage.getFile(), "graph.png").embed(embedBuilderWithGraph.build()).queue();
         }
     }
 }

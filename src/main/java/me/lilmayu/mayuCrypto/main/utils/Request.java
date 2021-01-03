@@ -7,7 +7,12 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Code from MurKoin
+ */
+
 public class Request {
+
     static OkHttpClient httpClient = new OkHttpClient();
 
     public static String post(String url, Map<String, String> params) throws IOException {

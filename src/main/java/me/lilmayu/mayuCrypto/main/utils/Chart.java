@@ -4,7 +4,12 @@ import org.json.JSONArray;
 
 import static java.lang.Math.abs;
 
+/**
+ * Code from MurKoin
+ */
+
 public class Chart {
+
     JSONArray arr;
     int width;
     int height;
@@ -43,7 +48,7 @@ public class Chart {
                 "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + width + "\" height=\"" + height + "\">");
         int currentX = 0;
         int candleWidth = (8 * width - 42) / (9 * arr.length());
-        int space = candleWidth/8;
+        int space = candleWidth / 8;
         double max = findMaximum();
         double min = findMinimum();
         double minCeil = Math.ceil(min);
@@ -58,7 +63,7 @@ public class Chart {
 
         double open, close, low, high, height, x, y;
         String color;
-        for (int i = arr.length()-1; i >= 0; i--) {
+        for (int i = arr.length() - 1; i >= 0; i--) {
             JSONArray item = arr.getJSONArray(i);
 
             high = (max - item.getDouble(3)) * k;

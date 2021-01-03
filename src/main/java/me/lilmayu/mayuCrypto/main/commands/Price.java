@@ -6,6 +6,10 @@ import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.utils.Symbol;
 import org.json.JSONObject;
 
+/**
+ * Code from MurKoin
+ */
+
 public class Price extends Command {
 
     public Price() {
@@ -19,7 +23,7 @@ public class Price extends Command {
         try {
             JSONObject ticker = Kucoin.marketData.getTicker(symbol.toString());
             String code = ticker.getString("code");
-            if(code.equals("200000")) {
+            if (code.equals("200000")) {
                 event.reply("Price for **" + symbol.getFirst() + "** is: **" + ticker.getJSONObject("data").getString("price") + " " + symbol.getSecond() + "**");
             } else {
                 event.reply(ticker.getString("msg"));
