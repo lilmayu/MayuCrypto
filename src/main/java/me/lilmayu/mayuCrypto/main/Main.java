@@ -1,9 +1,11 @@
 package me.lilmayu.mayuCrypto.main;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import lombok.Getter;
 import me.lilmayu.mayuCrypto.main.commands.Price;
 import me.lilmayu.mayuCrypto.main.commands.Stats;
 import me.lilmayu.mayuCrypto.main.configUtils.BotConfig;
+import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -13,9 +15,14 @@ import javax.security.auth.login.LoginException;
 
 public class Main {
 
-    public static BotConfig botConfig;
+    // Config
+    public static @Getter BotConfig botConfig;
+
+    // JDA Api
+    private static @Getter JDA JDAApi;
 
     public static void main(String[] args) throws LoginException, InterruptedException {
+        long startStartup = System.currentTimeMillis();
         Logger.info("MayuCrypto -> Hello!");
 
         Logger.info("Loading main Config file...");
@@ -24,6 +31,9 @@ public class Main {
             Logger.error("Config isn't valid, please check config.json!");
             return;
         }
+
+        Logger.info("Registering ExceptionInformer...");
+        ExceptionInformer.registerExceptionHandler();
 
         CommandClientBuilder client = new CommandClientBuilder()
                 .useDefaultGame()
@@ -34,11 +44,11 @@ public class Main {
                 .addCommand(new Price())
                 .addCommand(new Stats());
 
-        JDA api = JDABuilder.createDefault(botConfig.getDiscordToken())
+        JDAApi = JDABuilder.createDefault(botConfig.getDiscordToken())
                 .addEventListeners(client.build())
                 .build()
                 .awaitReady();
 
-        Logger.success("Loading done! Have a nice day.");
+        Logger.success("Loading done, took " + (System.currentTimeMillis() - startStartup) + "ms!");
     }
 }

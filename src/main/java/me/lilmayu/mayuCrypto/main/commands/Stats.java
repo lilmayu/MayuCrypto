@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.utils.Chart;
+import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.Image;
 import me.lilmayu.mayuCrypto.main.utils.Symbol;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
@@ -74,6 +75,7 @@ public class Stats extends Command {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            ExceptionInformer.handle(e);
             exception = e;
             Logger.error("Error occurred while creating a stats!");
         }
@@ -82,26 +84,11 @@ public class Stats extends Command {
             EmbedBuilder errorMessageEmbed = new EmbedBuilder();
             errorMessageEmbed.setTitle("Error occurred!");
             if (exception != null) {
-                StringBuilder stackTrace = new StringBuilder("```\n");
-                StackTraceElement[] stackTraceElements = exception.getStackTrace();
-                for (StackTraceElement stackTraceElement : stackTraceElements) {
-                    if (stackTrace.toString().length() + stackTraceElement.toString().length() >= 1024) {
-                        if (stackTrace.toString().length() <= 1020) {
-                            stackTrace.append("...");
-                        }
-                        break;
-                    }
-                    stackTrace.append(stackTraceElement.toString()).append("\n");
-                }
-                stackTrace.append("```");
-                errorMessageEmbed.addField("***Full stack trace***", stackTrace.toString(), false);
-                Logger.debug("here 1");
+                errorMessageEmbed.setDescription("Exception: " + exception.getMessage());
             } else {
                 errorMessageEmbed.addField("***Full stack trace***", "There was not any exception. Image object is null.", false);
-                Logger.debug("here 2");
             }
             message.editMessage(errorMessageEmbed.build()).queue();
-            Logger.debug("here 3");
         } else {
             event.getChannel().sendFile(finalImage.getFile(), "graph.png").embed(embedBuilderWithGraph.build()).queue();
         }
