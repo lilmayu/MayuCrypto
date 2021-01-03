@@ -1,4 +1,4 @@
-package me.sergeykuroedov.utils;
+package me.lilmayu.mayuCrypto.main.utils;
 
 import org.json.JSONArray;
 

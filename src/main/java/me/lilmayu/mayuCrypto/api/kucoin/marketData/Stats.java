@@ -1,4 +1,4 @@
-package me.sergeykuroedov.api.kucoin.marketdata;
+package me.lilmayu.mayuCrypto.api.kucoin.marketData;
 
 /*
     GET /api/v1/market/stats
@@ -20,8 +20,8 @@ package me.sergeykuroedov.api.kucoin.marketdata;
     }
  */
 
-import me.sergeykuroedov.api.kucoin.Kucoin;
-import me.sergeykuroedov.utils.Request;
+import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
+import me.lilmayu.mayuCrypto.main.utils.Request;
 import org.json.JSONObject;
 
 import java.io.IOException;

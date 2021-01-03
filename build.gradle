@@ -1,32 +1,60 @@
 plugins {
     id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-application {
-    mainClassName = 'me.sergeykuroedov.murkoin.MurKoin'
-}
-group 'me.sergeykuroedov.murkoin'
-sourceCompatibility = 1.8
-version '0.0.2'
+group 'me.lilmayu'
+version 'a_0.0.1'
+
 repositories {
     mavenCentral()
     jcenter()
+
+    flatDir {
+        dirs 'libs'
+    }
 }
+
 dependencies {
-    compile "net.dv8tion:JDA:4.1.1_127"
+    //JDA
+    compile "net.dv8tion:JDA:4.2.0_225"
+    // JDA Utilities
     compile group: 'com.jagrosh', name: 'jda-utilities', version: '3.0.3'
     compile group: 'org.im4java', name: 'im4java', version: '1.4.0'
 
+    // SLF4J
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+    compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
+    compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
+
+    // GSon
+    compile 'com.google.code.gson:gson:2.8.6'
+
+    // https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-transcoder
+    compile group: 'org.apache.xmlgraphics', name: 'batik-transcoder', version: '1.13'
+    // https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-codec
+    compile group: 'org.apache.xmlgraphics', name: 'batik-codec', version: '1.13'
+
+
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
 }
-compileJava.options.encoding = 'UTF-8'
-jar {
+
+task compileProgram(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'me.sergeykuroedov.murkoin.MurKoin'
+        attributes(
+                'Main-Class': 'me.lilmayu.mayuCrypto.main.Main'
+        )
     }
+    from { configurations.compile.findAll { !it.name.endsWith('pom') }.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
-artifacts {
-    shadowJar;
-}
-jar.enabled = false
+
+compileJava.options.encoding = 'UTF-8'

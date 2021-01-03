@@ -1,4 +1,4 @@
-package me.sergeykuroedov.utils;
+package me.lilmayu.mayuCrypto.main.utils;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;

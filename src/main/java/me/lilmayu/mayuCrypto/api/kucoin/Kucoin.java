@@ -1,6 +1,6 @@
-package me.sergeykuroedov.api.kucoin;
+package me.lilmayu.mayuCrypto.api.kucoin;
 
-import me.sergeykuroedov.api.kucoin.marketdata.MarketData;
+import me.lilmayu.mayuCrypto.api.kucoin.marketData.MarketData;
 
 public class Kucoin {
     String Url = "https://kucoin.com/";

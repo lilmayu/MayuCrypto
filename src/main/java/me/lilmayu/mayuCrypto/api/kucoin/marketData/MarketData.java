@@ -1,6 +1,6 @@
-package me.sergeykuroedov.api.kucoin.marketdata;
+package me.lilmayu.mayuCrypto.api.kucoin.marketData;
 
-import me.sergeykuroedov.utils.Symbol;
+import me.lilmayu.mayuCrypto.main.utils.Symbol;
 import org.json.JSONObject;
 
 import java.io.IOException;

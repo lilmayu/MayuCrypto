@@ -1,9 +1,9 @@
-package me.sergeykuroedov.murkoin.commands;
+package me.lilmayu.mayuCrypto.main.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.sergeykuroedov.api.kucoin.Kucoin;
-import me.sergeykuroedov.utils.Symbol;
+import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
+import me.lilmayu.mayuCrypto.main.utils.Symbol;
 import org.json.JSONObject;
 
 public class Price extends Command {
