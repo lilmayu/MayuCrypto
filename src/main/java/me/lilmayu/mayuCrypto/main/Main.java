@@ -5,6 +5,7 @@ import lombok.Getter;
 import me.lilmayu.mayuCrypto.main.commands.Price;
 import me.lilmayu.mayuCrypto.main.commands.Stats;
 import me.lilmayu.mayuCrypto.main.configUtils.BotConfig;
+import me.lilmayu.mayuCrypto.main.managers.ChartManager;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.JDA;
@@ -21,6 +22,9 @@ public class Main {
     // JDA Api
     private static @Getter JDA JDAApi;
 
+    // Managers
+    private static @Getter ChartManager chartManager;
+
     public static void main(String[] args) throws LoginException, InterruptedException {
         long startStartup = System.currentTimeMillis();
         Logger.info("MayuCrypto -> Hello!");
@@ -34,6 +38,9 @@ public class Main {
 
         Logger.info("Registering ExceptionInformer...");
         ExceptionInformer.registerExceptionHandler();
+
+        Logger.info("Loading managers...");
+        chartManager = new ChartManager();
 
         CommandClientBuilder client = new CommandClientBuilder()
                 .useDefaultGame()

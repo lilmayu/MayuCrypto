@@ -1,5 +1,6 @@
 package me.lilmayu.mayuCrypto.main.utils;
 
+import me.lilmayu.mayuCrypto.main.Main;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
@@ -58,10 +59,11 @@ public class Image {
     }
 
     public Image convertToPng(String output) throws IOException, TranscoderException {
+        String path = Main.getChartManager().getPathToCharts();
         String svg_URI_input = Paths.get("temp.svg").toUri().toURL().toString();
         TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
         //Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
-        OutputStream png_ostream = new FileOutputStream("graph.png");
+        OutputStream png_ostream = new FileOutputStream(path + output);
         TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
         // Step-3: Create PNGTranscoder and define hints if required
         PNGTranscoder my_converter = new PNGTranscoder();
@@ -70,7 +72,6 @@ public class Image {
         // Step 5- close / flush Output Stream
         png_ostream.flush();
         png_ostream.close();
-        String path = this.file.getAbsoluteFile().getParent() + File.separator;
         return new Image(path + output);
     }
 }

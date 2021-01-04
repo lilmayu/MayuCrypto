@@ -1,5 +1,6 @@
 package me.lilmayu.mayuCrypto.main.utils;
 
+import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import org.json.JSONArray;
 
 import static java.lang.Math.abs;
@@ -47,7 +48,8 @@ public class Chart {
                 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" +
                 "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" + width + "\" height=\"" + height + "\">");
         int currentX = 0;
-        int candleWidth = (8 * width - 42) / (9 * arr.length());
+        Logger.debug("ARR LENGHT: '" + arr.length() + "'");
+        int candleWidth = ((8 * width - 42) / (9 * arr.length()));
         int space = candleWidth / 8;
         double max = findMaximum();
         double min = findMinimum();
@@ -60,6 +62,7 @@ public class Chart {
             res.append(String.format("<line x1=\"0\" x2=\"%d\" y1=\"%f\" y2=\"%<f\" stroke-width=\"1\" stroke=\"#ccc\" />", width, k * (max - i)));
             res.append(String.format("<text x=\"%d\" y=\"%f\" fill=\"#ccc\">%f</text>", width - 42, k * (max - i) - 2, i));
         }
+        res.append(String.format("<text x=\"%d\" y=\"%d\" fill=\"#ccc\">%s</text>", 10, 10, "Made by Murka"));
 
         double open, close, low, high, height, x, y;
         String color;

@@ -3,6 +3,9 @@ package me.lilmayu.mayuCrypto.main.commands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
+import me.lilmayu.mayuCrypto.main.Main;
+import me.lilmayu.mayuCrypto.main.objects.ChartFile;
+import me.lilmayu.mayuCrypto.main.objects.KlinesType;
 import me.lilmayu.mayuCrypto.main.utils.Chart;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.Image;
@@ -11,6 +14,7 @@ import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import org.apache.xalan.xsltc.compiler.sym;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,7 +39,29 @@ public class Stats extends Command {
         embedBuilderGenerating.setTitle("Generating stats graph...");
         Message message = messageChannel.sendMessage(embedBuilderGenerating.build()).complete();
 
-        Symbol symbol = new Symbol(event.getArgs());
+        Symbol symbol;
+        KlinesType klinesType = KlinesType.HOUR_1;
+
+        String args = event.getArgs();
+        String[] argsArray = args.split(" ");
+
+        if (argsArray.length >= 1) {
+            symbol = new Symbol(argsArray[0]);
+            if (symbol.getFirst() == null || symbol.getSecond() == null) {
+                message.delete().complete();
+                event.reply("Invalid arguments! Please, see `!mc help stats`.");
+                return;
+            }
+            if (argsArray.length == 2) {
+                klinesType = KlinesType.getByType(argsArray[1]);
+            }
+        } else {
+            message.delete().complete();
+            event.reply("No arguments we're passed! Please, see `!mc help stats`.");
+            return;
+        }
+
+
         Image finalImage = null;
         Exception exception = null;
         EmbedBuilder embedBuilderWithGraph = null;
@@ -53,17 +79,13 @@ public class Stats extends Command {
                         .addField("24h low", data.getString("low"), true)
                         .addField("Change", data.getString("changePrice") + " (" + Math.round(percentage * 100.0) / 100.0 + " %)", true);
                 long epoch = System.currentTimeMillis() / 1000;
-                long start = epoch - 60 * 60 * 24;
-                JSONObject klines = Kucoin.marketData.getKlines(symbol, start, epoch, "1hour");
+                long start = epoch - ((klinesType.getS() * 24));
+                JSONObject klines = Kucoin.marketData.getKlines(symbol, start, epoch, klinesType);
                 if (klines.getString("code").equals("200000")) {
                     JSONArray arr = klines.getJSONArray("data");
-                    Chart ch = new Chart(arr, 600, 180);
-                    File f = new File("temp.svg");
-                    FileWriter fw = new FileWriter(f);
-                    fw.write(ch.generate());
-                    fw.close();
-                    finalImage = new Image(f).convertToPng("graph.png");
-                    embedBuilderWithGraph.setImage("attachment://graph.png");
+                    ChartFile chartFile = Main.getChartManager().createNewChart(arr, 600, 180);
+                    finalImage = chartFile.getImage();
+                    embedBuilderWithGraph.setImage("attachment://" + finalImage.getFile().getName());
                     message.delete().complete();
                 } else {
                     message.delete().complete();
@@ -90,7 +112,7 @@ public class Stats extends Command {
             }
             message.editMessage(errorMessageEmbed.build()).queue();
         } else {
-            event.getChannel().sendFile(finalImage.getFile(), "graph.png").embed(embedBuilderWithGraph.build()).queue();
+            event.getTextChannel().sendFile(finalImage.getFile(), finalImage.getFile().getName()).embed(embedBuilderWithGraph.build()).queue();
         }
     }
 }
