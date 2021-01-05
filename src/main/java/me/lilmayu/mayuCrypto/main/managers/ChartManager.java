@@ -67,11 +67,12 @@ public class ChartManager {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                boolean log = Main.getBotConfig().isLogChartClearing();
                 List<ChartFile> chartFiles = new ArrayList<>(Main.getChartManager().getChartFiles());
-                Logger.debug("Clearing up " + chartFiles.size() + " charts...");
+                if (log) Logger.debug("Clearing up " + chartFiles.size() + " charts...");
                 for (ChartFile chartFile : chartFiles) {
                     if (chartFile.getID() + 5000 <= System.currentTimeMillis()) {
-                        Logger.debug("Deleting chart '" + chartFile.getImage().getFile().getAbsolutePath() + "'.");
+                        if (log) Logger.debug("Deleting chart '" + chartFile.getImage().getFile().getAbsolutePath() + "'.");
                         boolean deleted = false;
                         try {
                             deleted = chartFile.getImage().getFile().delete();
@@ -82,10 +83,10 @@ public class ChartManager {
                         if (!deleted) {
                             Logger.error("There was problem deleting chart named '" + chartFile.getName() + "'!");
                         }
-                        Main.getChartManager().removeChartFile(chartFile);
+                        if (log) Main.getChartManager().removeChartFile(chartFile);
                     }
                 }
-                Logger.debug("Done with clearing up charts. Size reduced from " + chartFiles.size() + " to " + Main.getChartManager().getChartFiles().size());
+                if (log) Logger.debug("Done with clearing up charts. Size reduced from " + chartFiles.size() + " to " + Main.getChartManager().getChartFiles().size());
             }
         }, 60000, 60000);
     }

@@ -2,10 +2,12 @@ package me.lilmayu.mayuCrypto.main;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import lombok.Getter;
+import me.lilmayu.mayuCrypto.main.commands.Help;
 import me.lilmayu.mayuCrypto.main.commands.Price;
 import me.lilmayu.mayuCrypto.main.commands.Stats;
 import me.lilmayu.mayuCrypto.main.configUtils.BotConfig;
 import me.lilmayu.mayuCrypto.main.managers.ChartManager;
+import me.lilmayu.mayuCrypto.main.managers.GuildManager;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.JDA;
@@ -24,6 +26,7 @@ public class Main {
 
     // Managers
     private static @Getter ChartManager chartManager;
+    private static @Getter GuildManager guildManager;
 
     public static void main(String[] args) throws LoginException, InterruptedException {
         long startStartup = System.currentTimeMillis();
@@ -41,6 +44,7 @@ public class Main {
 
         Logger.info("Loading managers...");
         chartManager = new ChartManager();
+        guildManager = new GuildManager();
 
         CommandClientBuilder client = new CommandClientBuilder()
                 .useDefaultGame()
@@ -49,12 +53,15 @@ public class Main {
                 .setActivity(Activity.playing("Built on MurKoin!"))
                 .setPrefix(botConfig.getPrefix())
                 .addCommand(new Price())
-                .addCommand(new Stats());
+                .addCommand(new Stats())
+                .addCommand(new Help());
 
         JDAApi = JDABuilder.createDefault(botConfig.getDiscordToken())
                 .addEventListeners(client.build())
                 .build()
                 .awaitReady();
+
+        guildManager.refreshGuilds();
 
         Logger.success("Loading done, took " + (System.currentTimeMillis() - startStartup) + "ms!");
     }

@@ -6,7 +6,7 @@ import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.Main;
 import me.lilmayu.mayuCrypto.main.objects.ChartFile;
 import me.lilmayu.mayuCrypto.main.objects.KlinesType;
-import me.lilmayu.mayuCrypto.main.utils.Chart;
+import me.lilmayu.mayuCrypto.main.objects.MayuCommand;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.Image;
 import me.lilmayu.mayuCrypto.main.utils.Symbol;
@@ -14,22 +14,24 @@ import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import org.apache.xalan.xsltc.compiler.sym;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Code from MurKoin, edited by lilmayu
  */
 
-public class Stats extends Command {
+public class Stats extends MayuCommand {
 
     public Stats() {
         this.name = "Stats";
         this.aliases = new String[]{"stats"};
+        this.guildOnly = false;
+
+        Help.addCommand(this);
     }
 
     @Override
@@ -114,5 +116,26 @@ public class Stats extends Command {
         } else {
             event.getTextChannel().sendFile(finalImage.getFile(), finalImage.getFile().getName()).embed(embedBuilderWithGraph.build()).queue();
         }
+    }
+
+    @Override
+    public String getDescription() {
+        return "Will send you graph for selected Cryptocurrency.";
+    }
+
+    @Override
+    public String getSyntax() {
+        return "[CryptoCurr. Symbol] <time>";
+    }
+
+    @Override
+    public List<String> getExamples() {
+        List<String> examples = new ArrayList<>();
+        examples.add("BTC-USDT");
+        examples.add("ETH-USDT 30min");
+        examples.add("BTC-ETH 12hour");
+        examples.add("BTC-USDT day");
+        examples.add("BTC-USDT week");
+        return examples;
     }
 }

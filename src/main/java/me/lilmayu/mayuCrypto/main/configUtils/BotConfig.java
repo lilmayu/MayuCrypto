@@ -12,6 +12,8 @@ public class BotConfig {
     private @Getter final String discordToken, prefix;
     private @Getter final String exceptionMessageChannelID;
 
+    private @Getter final boolean logChartClearing;
+
     public BotConfig(String filename) {
         JsonUtilObject jsonUtilObject = JsonUtils.createOrLoadFile(filename);
 
@@ -25,6 +27,9 @@ public class BotConfig {
 
         jsonElement = checkForValue(jsonUtilObject, new ConfigValue("exceptionMessageChannelID", null));
         exceptionMessageChannelID = (jsonElement == null) ? null : jsonElement.getAsString();
+
+        jsonElement = checkForValue(jsonUtilObject, new ConfigValue("logChartClearing", false));
+        logChartClearing = jsonElement != null && jsonElement.getAsBoolean();
     }
 
     public boolean isValid() {
