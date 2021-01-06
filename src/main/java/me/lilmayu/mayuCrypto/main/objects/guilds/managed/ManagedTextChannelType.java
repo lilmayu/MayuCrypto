@@ -5,7 +5,8 @@ public enum ManagedTextChannelType {
 
     public static ManagedTextChannelType fromString(String type) {
         switch (type) {
-            case "UPDATE_PRICE_JUMPS": return ManagedTextChannelType.UPDATE_PRICE_JUMPS;
+            case "UPDATE_PRICE_JUMPS":
+                return ManagedTextChannelType.UPDATE_PRICE_JUMPS;
         }
         return null;
     }

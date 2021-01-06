@@ -5,7 +5,8 @@ public enum ManagedMessageType {
 
     public static ManagedMessageType fromString(String type) {
         switch (type) {
-            case "LIVE_CHART": return ManagedMessageType.LIVE_CHART;
+            case "LIVE_CHART":
+                return ManagedMessageType.LIVE_CHART;
         }
         return null;
     }

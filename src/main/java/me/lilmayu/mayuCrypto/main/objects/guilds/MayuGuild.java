@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import me.lilmayu.mayuCrypto.main.configUtils.GuildConfig;
-import me.lilmayu.mayuCrypto.main.utils.json.JsonUtils;
-import me.lilmayu.mayuCrypto.main.utils.json.objects.JsonUtilObject;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.List;
