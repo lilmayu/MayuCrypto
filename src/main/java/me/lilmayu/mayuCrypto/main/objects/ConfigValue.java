@@ -2,7 +2,6 @@ package me.lilmayu.mayuCrypto.main.objects;
 
 import com.google.gson.JsonArray;
 import lombok.Getter;
-import lombok.NonNull;
 
 public class ConfigValue {
 

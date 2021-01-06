@@ -6,6 +6,7 @@ import me.lilmayu.mayuCrypto.main.commands.Help;
 import me.lilmayu.mayuCrypto.main.commands.Price;
 import me.lilmayu.mayuCrypto.main.commands.Stats;
 import me.lilmayu.mayuCrypto.main.configUtils.BotConfig;
+import me.lilmayu.mayuCrypto.main.listeners.GuildListeners;
 import me.lilmayu.mayuCrypto.main.managers.ChartManager;
 import me.lilmayu.mayuCrypto.main.managers.GuildManager;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
@@ -13,6 +14,7 @@ import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
 
@@ -42,6 +44,9 @@ public class Main {
         Logger.info("Registering ExceptionInformer...");
         ExceptionInformer.registerExceptionHandler();
 
+        Logger.info("Registering Runtime Shutdown Hook...");
+        Runtime.getRuntime().addShutdownHook(getShutdownHookThread());
+
         Logger.info("Loading managers...");
         chartManager = new ChartManager();
         guildManager = new GuildManager();
@@ -56,13 +61,31 @@ public class Main {
                 .addCommand(new Stats())
                 .addCommand(new Help());
 
+        Logger.info("Registering a JDA...");
+
         JDAApi = JDABuilder.createDefault(botConfig.getDiscordToken())
                 .addEventListeners(client.build())
+                .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.DIRECT_MESSAGES)
+                .enableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS)
+                .addEventListeners(new GuildListeners())
                 .build()
                 .awaitReady();
 
         guildManager.refreshGuilds();
 
         Logger.success("Loading done, took " + (System.currentTimeMillis() - startStartup) + "ms!");
+    }
+
+    private static Thread getShutdownHookThread() {
+        Thread thread = new Thread(() -> {
+            Logger.info("Shutting down MayuCrypto...");
+            Main.getGuildManager().saveGuildDatabase(true, true);
+            Logger.success("Successfully saved guild database!");
+
+            Logger.info("Bye.~");
+        });
+        return thread;
     }
 }

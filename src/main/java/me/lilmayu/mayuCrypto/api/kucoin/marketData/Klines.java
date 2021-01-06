@@ -2,8 +2,8 @@ package me.lilmayu.mayuCrypto.api.kucoin.marketData;
 
 import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.objects.KlinesType;
+import me.lilmayu.mayuCrypto.main.utils.CryptoSymbol;
 import me.lilmayu.mayuCrypto.main.utils.Request;
-import me.lilmayu.mayuCrypto.main.utils.Symbol;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -42,13 +42,13 @@ import java.io.IOException;
 
 public class Klines {
 
-    private Symbol symbol;
+    private CryptoSymbol cryptoSymbol;
     private long start;
     private long end;
     private KlinesType type;
 
-    Klines(Symbol symbol, long start, long end, KlinesType type) {
-        this.symbol = symbol;
+    Klines(CryptoSymbol cryptoSymbol, long start, long end, KlinesType type) {
+        this.cryptoSymbol = cryptoSymbol;
         this.start = start;
         this.end = end;
         this.type = type;
@@ -56,7 +56,7 @@ public class Klines {
 
 
     public JSONObject get() throws IOException {
-        String url = Kucoin.apiUrl + String.format("/api/v1/market/candles?symbol=%s&startAt=%d&endAt=%d&type=%s", symbol, start, end, type.getType());
+        String url = Kucoin.apiUrl + String.format("/api/v1/market/candles?symbol=%s&startAt=%d&endAt=%d&type=%s", cryptoSymbol, start, end, type.getType());
         String json = Request.get(url);
         return new JSONObject(json);
     }

@@ -3,7 +3,7 @@ package me.lilmayu.mayuCrypto.main.commands;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.objects.MayuCommand;
-import me.lilmayu.mayuCrypto.main.utils.Symbol;
+import me.lilmayu.mayuCrypto.main.utils.CryptoSymbol;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -25,12 +25,12 @@ public class Price extends MayuCommand {
 
     @Override
     protected void execute(CommandEvent event) {
-        Symbol symbol = new Symbol(event.getArgs());
+        CryptoSymbol cryptoSymbol = new CryptoSymbol(event.getArgs());
         try {
-            JSONObject ticker = Kucoin.marketData.getTicker(symbol.toString());
+            JSONObject ticker = Kucoin.marketData.getTicker(cryptoSymbol.toString());
             String code = ticker.getString("code");
             if (code.equals("200000")) {
-                event.reply("Price for **" + symbol.getFirst() + "** is: **" + ticker.getJSONObject("data").getString("price") + " " + symbol.getSecond() + "**");
+                event.reply("Price for **" + cryptoSymbol.getFirst() + "** is: **" + ticker.getJSONObject("data").getString("price") + " " + cryptoSymbol.getSecond() + "**");
             } else {
                 event.reply(ticker.getString("msg"));
             }

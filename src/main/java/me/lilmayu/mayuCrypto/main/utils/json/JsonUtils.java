@@ -2,7 +2,6 @@ package me.lilmayu.mayuCrypto.main.utils.json;
 
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.lilmayu.mayuCrypto.main.exceptions.InvalidConfigValue;

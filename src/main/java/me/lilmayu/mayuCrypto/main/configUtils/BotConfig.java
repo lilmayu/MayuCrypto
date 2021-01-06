@@ -13,6 +13,7 @@ public class BotConfig {
     private @Getter final String exceptionMessageChannelID;
 
     private @Getter final boolean logChartClearing;
+    private @Getter final boolean removeGuildFromDatabaseOnLeave;
 
     public BotConfig(String filename) {
         JsonUtilObject jsonUtilObject = JsonUtils.createOrLoadFile(filename);
@@ -30,6 +31,9 @@ public class BotConfig {
 
         jsonElement = checkForValue(jsonUtilObject, new ConfigValue("logChartClearing", false));
         logChartClearing = jsonElement != null && jsonElement.getAsBoolean();
+
+        jsonElement = checkForValue(jsonUtilObject, new ConfigValue("removeGuildFromDatabaseOnLeave", false));
+        removeGuildFromDatabaseOnLeave = jsonElement != null && jsonElement.getAsBoolean();
     }
 
     public boolean isValid() {

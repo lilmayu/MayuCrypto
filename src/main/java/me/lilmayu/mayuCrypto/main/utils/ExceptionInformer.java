@@ -14,10 +14,6 @@ public class ExceptionInformer implements Thread.UncaughtExceptionHandler {
         System.setProperty("sun.awt.exception.handler", ExceptionInformer.class.getName());
     }
 
-    public void uncaughtException(Thread t, Throwable e) {
-        handle(e);
-    }
-
     public static void handle(Throwable throwable) {
         try {
             throwable.printStackTrace();
@@ -60,5 +56,9 @@ public class ExceptionInformer implements Thread.UncaughtExceptionHandler {
             e.printStackTrace();
             Logger.error("Could not send exception message to Exception Message Channel!");
         }
+    }
+
+    public void uncaughtException(Thread t, Throwable e) {
+        handle(e);
     }
 }

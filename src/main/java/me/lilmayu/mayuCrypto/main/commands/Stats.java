@@ -1,6 +1,5 @@
 package me.lilmayu.mayuCrypto.main.commands;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
 import me.lilmayu.mayuCrypto.main.Main;
@@ -9,7 +8,7 @@ import me.lilmayu.mayuCrypto.main.objects.KlinesType;
 import me.lilmayu.mayuCrypto.main.objects.MayuCommand;
 import me.lilmayu.mayuCrypto.main.utils.ExceptionInformer;
 import me.lilmayu.mayuCrypto.main.utils.Image;
-import me.lilmayu.mayuCrypto.main.utils.Symbol;
+import me.lilmayu.mayuCrypto.main.utils.CryptoSymbol;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -41,15 +40,15 @@ public class Stats extends MayuCommand {
         embedBuilderGenerating.setTitle("Generating stats graph...");
         Message message = messageChannel.sendMessage(embedBuilderGenerating.build()).complete();
 
-        Symbol symbol;
+        CryptoSymbol cryptoSymbol;
         KlinesType klinesType = KlinesType.HOUR_1;
 
         String args = event.getArgs();
         String[] argsArray = args.split(" ");
 
         if (argsArray.length >= 1) {
-            symbol = new Symbol(argsArray[0]);
-            if (symbol.getFirst() == null || symbol.getSecond() == null) {
+            cryptoSymbol = new CryptoSymbol(argsArray[0]);
+            if (cryptoSymbol.getFirst() == null || cryptoSymbol.getSecond() == null) {
                 message.delete().complete();
                 event.reply("Invalid arguments! Please, see `!mc help stats`.");
                 return;
@@ -69,20 +68,20 @@ public class Stats extends MayuCommand {
         EmbedBuilder embedBuilderWithGraph = null;
 
         try {
-            JSONObject stats = Kucoin.marketData.getStats(symbol.toString());
+            JSONObject stats = Kucoin.marketData.getStats(cryptoSymbol.toString());
             String code = stats.getString("code");
             if (code.equals("200000")) {
                 JSONObject data = stats.getJSONObject("data");
                 double percentage = data.getDouble("changeRate") * 100;
                 embedBuilderWithGraph = new EmbedBuilder()
-                        .setTitle("Stats " + symbol)
+                        .setTitle("Stats " + cryptoSymbol)
                         .addField("Price", data.getString("last"), false)
                         .addField("24h high", data.getString("high"), true)
                         .addField("24h low", data.getString("low"), true)
                         .addField("Change", data.getString("changePrice") + " (" + Math.round(percentage * 100.0) / 100.0 + " %)", true);
                 long epoch = System.currentTimeMillis() / 1000;
                 long start = epoch - ((klinesType.getS() * 24));
-                JSONObject klines = Kucoin.marketData.getKlines(symbol, start, epoch, klinesType);
+                JSONObject klines = Kucoin.marketData.getKlines(cryptoSymbol, start, epoch, klinesType);
                 if (klines.getString("code").equals("200000")) {
                     JSONArray arr = klines.getJSONArray("data");
                     ChartFile chartFile = Main.getChartManager().createNewChart(arr, 600, 180);

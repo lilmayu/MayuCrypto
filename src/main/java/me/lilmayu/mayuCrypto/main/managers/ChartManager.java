@@ -9,7 +9,6 @@ import me.lilmayu.mayuCrypto.main.utils.Image;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 import org.json.JSONArray;
 
-import javax.rmi.CORBA.Tie;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -72,7 +71,8 @@ public class ChartManager {
                 if (log) Logger.debug("Clearing up " + chartFiles.size() + " charts...");
                 for (ChartFile chartFile : chartFiles) {
                     if (chartFile.getID() + 5000 <= System.currentTimeMillis()) {
-                        if (log) Logger.debug("Deleting chart '" + chartFile.getImage().getFile().getAbsolutePath() + "'.");
+                        if (log)
+                            Logger.debug("Deleting chart '" + chartFile.getImage().getFile().getAbsolutePath() + "'.");
                         boolean deleted = false;
                         try {
                             deleted = chartFile.getImage().getFile().delete();
@@ -86,7 +86,8 @@ public class ChartManager {
                         if (log) Main.getChartManager().removeChartFile(chartFile);
                     }
                 }
-                if (log) Logger.debug("Done with clearing up charts. Size reduced from " + chartFiles.size() + " to " + Main.getChartManager().getChartFiles().size());
+                if (log)
+                    Logger.debug("Done with clearing up charts. Size reduced from " + chartFiles.size() + " to " + Main.getChartManager().getChartFiles().size());
             }
         }, 60000, 60000);
     }

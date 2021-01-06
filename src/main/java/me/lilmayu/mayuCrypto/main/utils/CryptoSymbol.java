@@ -4,12 +4,12 @@ package me.lilmayu.mayuCrypto.main.utils;
  * Code from MurKoin
  */
 
-public class Symbol {
+public class CryptoSymbol {
 
     private String first;
     private String second;
 
-    public Symbol(String str) {
+    public CryptoSymbol(String str) {
         str = str.toUpperCase();
         String[] arr = str.split("-");
         if (arr.length == 1) {
