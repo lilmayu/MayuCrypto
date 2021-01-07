@@ -37,6 +37,12 @@ public class MayuGuild {
             managedMessageJson.addProperty("textChannelID", managedMessage.getTextChannelID());
             managedMessageJson.addProperty("type", managedMessage.getType().toString());
 
+            JsonObject data = new JsonObject();
+
+            data.addProperty("symbol", managedMessage.getDataCryptoSymbol().toString());
+
+            managedMessageJson.add("data", data);
+
             managedMessagesJsonArray.add(managedMessageJson);
         }
 
@@ -61,5 +67,9 @@ public class MayuGuild {
         guildJsonObject.add("managedTextChannels", managedTextChannelsJsonArray);
 
         return guildJsonObject;
+    }
+
+    public void addManagedMessage(ManagedMessage managedMessage) {
+        this.managedMessageList.add(managedMessage);
     }
 }

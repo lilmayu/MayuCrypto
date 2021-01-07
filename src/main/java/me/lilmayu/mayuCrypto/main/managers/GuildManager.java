@@ -25,6 +25,8 @@ public class GuildManager {
 
     private @Getter List<MayuGuild> mayuGuildList = new ArrayList<>();
 
+    private @Getter boolean guildsLoaded = false;
+
     public GuildManager() {
     }
 
@@ -33,6 +35,8 @@ public class GuildManager {
             Thread.currentThread().setName("RefreshGuildsThread");
             long start = System.currentTimeMillis();
             Logger.info("Refreshing guilds...");
+            guildsLoaded = false;
+            mayuGuildList = new ArrayList<>();
 
             List<Guild> guildList = new ArrayList<>(Main.getJDAApi().getGuilds());
             JsonObject guildDatabaseJson = getGuildDatabaseJson();
@@ -58,7 +62,11 @@ public class GuildManager {
                     String textChannelID = managedMessageJsonData.get("textChannelID").getAsString();
                     String type = managedMessageJsonData.get("type").getAsString();
 
-                    ManagedMessage managedMessage = new ManagedMessage(messageID, textChannelID, ManagedMessageType.fromString(type));
+                    JsonObject data = managedMessageJsonData.get("data").getAsJsonObject();
+
+                    CryptoSymbol symbol = new CryptoSymbol(data.get("symbol").getAsString());
+
+                    ManagedMessage managedMessage = new ManagedMessage(messageID, textChannelID, ManagedMessageType.fromString(type), symbol);
                     if (!managedMessage.isValidAtConstruct()) {
                         Logger.warning("See error above. ");
                         continue;
@@ -110,6 +118,7 @@ public class GuildManager {
                 Logger.info("Guild database is up-to-date.");
 
             Logger.success("Successfully refreshed guilds, took " + (System.currentTimeMillis() - start) + "ms!");
+            guildsLoaded = true;
         });
         thread.start();
     }
@@ -125,8 +134,9 @@ public class GuildManager {
     public void updateGuildList(MayuGuild mayuGuild) {
         Thread thread = new Thread(() -> {
             Thread.currentThread().setName("UpdateGuildListThread");
+            List<MayuGuild> mayuGuilds = new ArrayList<>(mayuGuildList);
             int counter = 0;
-            for (MayuGuild mayuGuildInList : mayuGuildList) {
+            for (MayuGuild mayuGuildInList : mayuGuilds) {
                 if (mayuGuildInList.getGuild().getIdLong() == mayuGuild.getGuild().getIdLong()) {
                     mayuGuildList.remove(counter);
                     mayuGuildList.add(mayuGuild);
@@ -187,6 +197,14 @@ public class GuildManager {
         thread.start();
         if (waitForThread)
             thread.join();
+    }
+
+    // Adders //
+    public void addManagedMessage(String guildID, ManagedMessage managedMessage) {
+        MayuGuild mayuGuild = getGuild(guildID);
+        mayuGuild.addManagedMessage(managedMessage);
+        updateGuildList(mayuGuild);
+        saveGuildDatabase(false, false);
     }
 
     // Getters inside //

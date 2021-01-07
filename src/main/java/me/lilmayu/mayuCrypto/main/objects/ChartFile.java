@@ -4,7 +4,6 @@ import lombok.Getter;
 import me.lilmayu.mayuCrypto.main.Main;
 import me.lilmayu.mayuCrypto.main.utils.Chart;
 import me.lilmayu.mayuCrypto.main.utils.Image;
-import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
 
 public class ChartFile {
 
@@ -19,7 +18,6 @@ public class ChartFile {
     }
 
     public String getURLToChart() {
-        Logger.debug("Name: '" + getName() + "'");
         return Main.getChartManager().getHostingURL() + getName();
     }
 

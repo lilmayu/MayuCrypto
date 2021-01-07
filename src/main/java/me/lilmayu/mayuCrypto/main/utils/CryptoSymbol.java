@@ -1,5 +1,8 @@
 package me.lilmayu.mayuCrypto.main.utils;
 
+import me.lilmayu.mayuCrypto.api.kucoin.Kucoin;
+import org.json.JSONObject;
+
 /**
  * Code from MurKoin
  */
@@ -41,6 +44,19 @@ public class CryptoSymbol {
 
     public void setSecond(String str) {
         second = str;
+    }
+
+    public boolean isValid() {
+        try {
+            JSONObject ticker = Kucoin.marketData.getTicker(toString());
+            String code = ticker.getString("code");
+            if (code.equals("200000")) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
 
     @Override

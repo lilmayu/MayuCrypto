@@ -5,7 +5,9 @@ import me.lilmayu.mayuCrypto.main.Main;
 import me.lilmayu.mayuCrypto.main.objects.guilds.managed.ManagedTextChannelType;
 import me.lilmayu.mayuCrypto.main.utils.CryptoSymbol;
 import me.lilmayu.mayuCrypto.main.utils.logger.Logger;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 public class ManagedTextChannel {
@@ -23,6 +25,7 @@ public class ManagedTextChannel {
     private @Getter boolean userValid;
     private @Getter boolean messageChannelValid;
     private @Getter boolean isValidAtConstruct = false;
+    private @Getter boolean alreadyResolved = false;
 
     public ManagedTextChannel(String textChannelID, boolean isUserA, String userID, ManagedTextChannelType type, CryptoSymbol cryptoSymbol, int jumpValue) {
         this.textChannelID = textChannelID;
@@ -58,6 +61,7 @@ public class ManagedTextChannel {
             Logger.error("TextChannelID is invalid. ManagedTextChannel: TextChannelID = '" + textChannelID + "'");
             return false;
         }
+        alreadyResolved = true;
         return true;
     }
 }
